@@ -107,20 +107,32 @@ class Graph:
         """
 
         # make a queue
+        queue = Queue()
         # make a set for visited
-
+        visited = set()
         # enqueue A PATH TO the starting_Vertex
-
+        queue.enqueue([starting_vertex])
         # while the queue isn't empty
+        while queue.size() > 0:
             # dequeue the next path
+            current_path = queue.dequeue()
             # current_node is the last thing in the path
-            # if so, return path
+            current_node = current_path[-1]
+            if current_node == destination_vertex:
+                return current_path
+            else:
+                # if not, mark as visited
+                if current_node not in visited:
+                    visited.add(current_node)
+                    # get the neighbors
+                    edges = self.get_neighbors(current_node)
 
-            # if not, mark as visited
-            # get the neighbors
-            # copy the path, add the neighbor to the
-            # for each one, add a PATH TO IT to our queue
-        pass  # TODO
+                    for edge in edges:
+                        # copy the path, add the neighbor to the
+                        path_copy = list(current_path)
+                        path_copy.append(edge)
+                        # for each one, add a PATH TO IT to our queue
+                        queue.enqueue(path_copy)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -128,7 +140,25 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        stack = Stack()
+        visited = set()
+        stack.push([starting_vertex])
+
+        while stack.size() > 0:
+            currrent_path = stack.pop()
+            current_node = currrent_path[-1]
+
+            if current_node == destination_vertex:
+                return currrent_path
+            else:
+                if current_node not in visited:
+                    visited.add(current_node)
+                    edges = self.get_neighbors(current_node)
+
+                    for edge in edges:
+                        path_copy = list(currrent_path)
+                        path_copy.append(edge)
+                        stack.push(path_copy)
 
     def dfs_recursive(self, starting_vertex):
         """
@@ -192,7 +222,7 @@ if __name__ == '__main__':
     #     1, 2, 4, 6, 3, 5, 7
     # '''
     # graph.dft(1)
-    graph.dft_recursive(1)
+    # graph.dft_recursive(1)
 
     # '''
     # Valid BFS path:
@@ -205,7 +235,7 @@ if __name__ == '__main__':
     #     [1, 2, 4, 6]
     #     [1, 2, 4, 7, 6]
     # '''
-    # print(graph.dfs(1, 6))
+    print(graph.dfs(1, 6))
     # print(graph.dfs_recursive(1, 6))
 
 """
