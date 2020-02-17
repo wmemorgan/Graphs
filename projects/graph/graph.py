@@ -143,6 +143,7 @@ class Graph:
         stack = Stack()
         visited = set()
         stack.push([starting_vertex])
+        print(f"initial stack: {stack.stack}")
 
         while stack.size() > 0:
             currrent_path = stack.pop()
@@ -159,8 +160,9 @@ class Graph:
                         path_copy = list(currrent_path)
                         path_copy.append(edge)
                         stack.push(path_copy)
+                        print(f"updated stack: {stack.stack}")
 
-    def dfs_recursive(self, starting_vertex):
+    def dfs_recursive(self, starting_vertex, destination_vertex, visited=set(), path=[]):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -168,7 +170,24 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        visited.add(starting_vertex)
+        path = path + [starting_vertex]
+        
+        if starting_vertex == destination_vertex:
+            return path
+
+        edges = self.get_neighbors(starting_vertex)
+        print(f"edges: {edges}")
+        for edge in edges:
+            print(f"trying edge: {edge}")
+            if edge not in visited:
+                new_path = self.dfs_recursive(edge, destination_vertex, visited, path)
+                print(f"new path: {new_path}")
+                if new_path:
+                    return new_path
+        return None
+    
+                
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
@@ -235,8 +254,8 @@ if __name__ == '__main__':
     #     [1, 2, 4, 6]
     #     [1, 2, 4, 7, 6]
     # '''
-    print(graph.dfs(1, 6))
-    # print(graph.dfs_recursive(1, 6))
+    # print(graph.dfs(1, 6))
+    print(graph.dfs_recursive(1, 6))
 
 """
 Depth-First Traversal
