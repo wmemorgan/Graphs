@@ -80,29 +80,27 @@ class SocialGraph:
         # !!!! IMPLEMENT ME
         # make a queue
         queue = Queue()
-        # add user_id to visited dict and assign path [user_id] as value
-        visited[user_id] = [user_id]
+        # add initial PATH to queue
+        queue.enqueue([user_id])
+        # # add user_id to visited dict and assign path [user_id] as value
+        # visited[user_id] = [user_id]
         # loop through queue
         while queue.size() > 0:
             ## dequeue the path
             path = queue.dequeue()
             ## get current user
             current_user = path[-1]
-            ## compare current user with user_id
-            if current_user == user_id:
-                ### if equal return the path
-                return path
-            ### else check if current user is in visited dict
-            else:
-                if current_user not in visited:
-                    visited[current_user] = path
-                # iterate through friends
-                for friend in self.friendships:
-                    ## copy the path, add the neighbor to the
-                    path_copy = list(path)
-                    path_copy.append(friend)
-                    ## for each one, add a PATH TO IT to our queue
-                    queue.enqueue(path_copy)
+
+            if current_user not in visited:
+                visited[current_user] = path
+            # iterate through friendships
+            # print(f"friendships: {self.friendships[current_user]}")
+            for friend in self.friendships[current_user]:
+                ## copy the path, add the neighbor to the
+                path_copy = list(path)
+                path_copy.append(friend)
+                ## for each one, add a PATH TO IT to our queue
+                queue.enqueue(path_copy)
                 
         return visited
 
