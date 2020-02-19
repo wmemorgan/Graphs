@@ -77,13 +77,11 @@ class SocialGraph:
         The key is the friend's ID and the value is the path.
         """
         visited = {}  # Note that this is a dictionary, not a set
-        # !!!! IMPLEMENT ME
+        # Implement BFT algorithm
         # make a queue
         queue = Queue()
         # add initial PATH to queue
         queue.enqueue([user_id])
-        # # add user_id to visited dict and assign path [user_id] as value
-        # visited[user_id] = [user_id]
         # loop through queue
         while queue.size() > 0:
             ## dequeue the path
@@ -93,14 +91,13 @@ class SocialGraph:
 
             if current_user not in visited:
                 visited[current_user] = path
-            # iterate through friendships
-            # print(f"friendships: {self.friendships[current_user]}")
-            for friend in self.friendships[current_user]:
-                ## copy the path, add the neighbor to the
-                path_copy = list(path)
-                path_copy.append(friend)
-                ## for each one, add a PATH TO IT to our queue
-                queue.enqueue(path_copy)
+                # iterate through friendships
+                for friend in self.friendships[current_user]:
+                    ## copy the path, add the neighbor to the
+                    path_copy = list(path)
+                    path_copy.append(friend)
+                    ## for each one, add a PATH TO IT to our queue
+                    queue.enqueue(path_copy)
                 
         return visited
 
