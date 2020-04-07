@@ -11,9 +11,9 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
+# map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
-# map_file = "maps/test_loop.txt"
+map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
 
@@ -41,40 +41,76 @@ stack = Stack()
 # Add starting room to the stack
 stack.push(player.current_room)
 
-while stack.size() > 0:
+while len(explore_graph) < len(room_graph):
+    # while stack.size() > 0:
     current_room = stack.pop()
-    #print(f"ROOM EXITS: {player.current_room.get_exits()}")
     available_exits = player.current_room.get_exits()
 
     # Check if current room is in explore_graph:
-    if current_room.id not in explore_graph:
+    if current_room and current_room.id not in explore_graph:
         # Add to explore_graph
         explore_graph[current_room.id] = {exit: '?' for exit in available_exits}
         # Randomly select an exit
         random_exit = select_exit(explore_graph[current_room.id])
 
-        if random_exit:
-            print(f"random_exit: {random_exit}")
-            traversal_path.append(random_exit)
-            prev_room = current_room
-            player.travel(random_exit)
-            explore_graph[prev_room.id][random_exit] = player.current_room.id
-            stack.push(player.current_room)
+        # if random_exit:
+        #     #print(f"random_exit: {random_exit}")
+        traversal_path.append(random_exit)
+        prev_room = current_room
+        player.travel(random_exit)
+        explore_graph[prev_room.id][random_exit] = player.current_room.id
+        stack.push(player.current_room)
+
 
     else:
-         # Randomly select an exit
-        random_exit = select_exit(explore_graph[current_room.id])
+        if current_room:
+            # Randomly select an exit
+            random_exit = select_exit(explore_graph[current_room.id])
 
-        if random_exit:
-            print(f"random_exit: {random_exit}")
-            traversal_path.append(random_exit)
-            prev_room = current_room
-            player.travel(random_exit)
-            explore_graph[prev_room.id][random_exit] = player.current_room.id
-            stack.push(player.current_room)
+            if random_exit:
+                traversal_path.append(random_exit)
+                prev_room = current_room
+                player.travel(random_exit)
+                explore_graph[prev_room.id][random_exit] = player.current_room.id
+                stack.push(player.current_room)
+            else:
+                print(f"No more '?' exits")
+                print(f"where am I?: room {current_room.id}")
+                print(
+                    f"and where have I been? room {player.prev_room.id} from {player.prev_direction} direction")
+                print(f"what is already in graph? : {explore_graph}")
+                print(f"STARTING ROOM: {player.current_room.id}")
+                print(f"AVAILABLE EXITS: {explore_graph[player.current_room.id]}")
+                something = find_unexplored_room(player, explore_graph)
+
+                if something:
+                    for step in something:
+                        traversal_path.append(step)
+                        prev_room = player.current_room
+                        player.travel(step)
+                        if prev_room == player.current_room:
+                            break
+                        
+                        if player.current_room.id in explore_graph:
+                            explore_graph[prev_room.id][step] = player.current_room.id
+                        else:
+                            print(f"MISSING ROOM {player.current_room.id} ADDING IT TO STACK")
+                            stack.push(player.current_room)
+                            break
+                print(f"FINAL GRAPH STATUS: {explore_graph}")
+                print(f"where am I?: room {current_room.id}")
+                print(
+                    f"and where have I been? room {player.prev_room.id} from {player.prev_direction} direction")
+                        # explore_graph[prev_room.id][random_exit] = player.current_room.id
+                        # stack.push(player.current_room)
+
+                    # else:
+                    #     print(f"CRAPPED OUT AGAIN: {something}")
+
         else:
-            print(f"No more exits")
-            print(f"explore_graph {explore_graph}")
+            break
+            
+   
 
 
 

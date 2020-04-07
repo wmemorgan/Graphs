@@ -44,33 +44,42 @@ def reverse_direction(direction):
     try:
         return directions[direction]
     except KeyError:
-        print(f"Invalid direction")
+        print(f"Invalid direction: {direction}")
         return None
 
-def find_unexplored_room(player, graph, last_direction):
+def find_unexplored_room(player, graph):
     queue = Queue()
     visited_rooms = set()
-
-    queue.enqueue([(reverse_direction(last_direction), player.current_room.id)])
+    queue.enqueue([(player.prev_direction, player.current_room.id)])
 
     while queue.size() > 0:
         current_path = queue.dequeue()
-        current_direction = current_path[-1][0]
-        current_room_id = current_path[-1][1]
+        last_room_id = current_path[-1][1]
 
-        if '?' in graph[current_room_id].values():
-            path = []
+        if '?' in graph[last_room_id].values():
+            path = 
+            # print(f"FOUND SOMETHING: {graph[last_room_id]}")
+            # print(f"current_path: {current_path}")
+            # unexplored_exit = [k for (k, v) in graph[last_room_id].items() if v == '?']
+            # unexplored_path = [direction for (
+            #     direction, room_id) in current_path if direction is not None]
+            # unexplored_path.extend(unexplored_exit)
+            # print(f"UNEXPLORED PATH: {unexplored_path}")
+            # return unexplored_path
 
-            for p in current_path:
-                path.append(p[0])
-                print(f"p {p}")
 
-            return path
+        if last_room_id not in visited_rooms:
+            visited_rooms.add(last_room_id)
 
-        if current_room_id not in visited_rooms:
-            visited_rooms.add(current_room_id)
-
-            for direction, room_id in graph[current_room_id].items():
+            for direction, room_id in graph[last_room_id].items():
                 path_copy = list(current_path)
                 path_copy.append((direction, room_id))
                 queue.enqueue(path_copy)
+
+
+        #     pass
+
+
+
+
+    
