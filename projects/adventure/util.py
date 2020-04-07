@@ -74,23 +74,3 @@ def find_unexplored_room(player, graph, last_direction):
                 path_copy = list(current_path)
                 path_copy.append((direction, room_id))
                 queue.enqueue(path_copy)
-
-
-def bfs_paths(graph, start, goal, last_direction):
-    queue = Queue()
-    queue.enqueue(([reverse_direction(last_direction)], start))
-    while queue:
-        (path, vertex) = queue.dequeue()
-        print(f"items in my graph {graph[vertex]}")
-        for direction, room_id in graph[vertex].items():
-            if room_id == goal:
-                yield path + [direction]
-            else:
-                queue.enqueue((path + [direction], room_id))
-
-
-def shortest_path(graph, start, goal, direction):
-    try:
-        return next(bfs_paths(graph, start, goal, direction))
-    except StopIteration:
-        return None
