@@ -14,8 +14,8 @@ world = World()
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
-map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+# map_file = "maps/test_loop_fork.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph = literal_eval(open(map_file, "r").read())
@@ -62,15 +62,15 @@ while len(explore_graph) < len(room_graph):
     possible_exits = [
         direction for (direction, room_id) in explore_graph[current_room.id].items() if room_id == '?']
 
-    if len(explore_graph[current_room.id].keys()) == 1 and len(possible_exits) > 0:
-        direction = player.current_room.get_exits()[0]
-        print(f"EXITS: {direction}")
-        traversal_path.append(direction)
-        prev_room = current_room
-        player.travel(direction)
-        stack.push(player.current_room)
+    # if len(explore_graph[current_room.id].keys()) == 1 and len(possible_exits) > 0:
+    #     direction = player.current_room.get_exits()[0]
+    #     print(f"EXITS: {direction}")
+    #     traversal_path.append(direction)
+    #     prev_room = current_room
+    #     player.travel(direction)
+    #     stack.push(player.current_room)
 
-    elif len(possible_exits) > 0:
+    if len(possible_exits) > 0:
         print(f"POSSIBLE EXITS: {possible_exits}")
         random_exit = random.choice(possible_exits)
         #print(f"random_exit: {random_exit}")
@@ -89,29 +89,31 @@ while len(explore_graph) < len(room_graph):
         # if len(find_exit) == 1:
         #     find_exit = find_unexplored_room(player, explore_graph)
 
-        if find_exit:
-            for step in find_exit:
-                print(f"starting in room {player.current_room.id}")
-                print(f"GOING {step}")
-                traversal_path.append(step)
-                player.travel(step)
-                print(f"In room {player.current_room.id}")
-                print(f"PREVIOUS ROOM {player.prev_room.id}")
+        # if find_exit:
+        for step in find_exit:
+            print(f"starting in room {player.current_room.id}")
+            print(f"GOING {step}")
+            traversal_path.append(step)
+            player.travel(step)
+            print(f"In room {player.current_room.id}")
+            print(f"PREVIOUS ROOM {player.prev_room.id}")
 
-                if player.current_room.id in explore_graph:
-                    explore_graph[player.prev_room.id][step] = player.current_room.id
+            if player.current_room.id not in explore_graph:
+                # explore_graph[player.prev_room.id][step] = player.current_room.id
 
-                else:
-                    print(
-                        f"ADD ROOM {player.current_room.id} TO STACK")
-                    stack.push(player.current_room)
-                    break
+            # else:
+                print(
+                    f"ADD ROOM {player.current_room.id} TO STACK")
+                stack.push(player.current_room)
+                break
+                    
 
             print(f"ending room {player.current_room.id}")
             print(f"graph after BFS: {explore_graph}")
 
     print(f"DEAD END AT ROOM {player.current_room.id} KEEP IT GOING")
-    stack.push(player.current_room)
+    
+    # stack.push(player.current_room)
     print(
     f"Number of rooms in explore_graph: {len(explore_graph)}")
     # print(f"current stack {stack.stack}")
