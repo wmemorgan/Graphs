@@ -92,20 +92,15 @@ def find_unexplored_room(player, graph):
             
         #     return backtrack_path
 
-
-        # else:    
-        for (direction, room_id) in graph[last_room_id].items():
-            if room_id not in visited_rooms:
-                visited_rooms.add(room_id)
+        # else: 
+        if last_room_id not in visited_rooms:
+            visited_rooms.add(last_room_id)
+            for (direction, room_id) in graph[last_room_id].items():
                 pair = (direction, room_id)
 
-            # else:
-            #     pair = [(direction, room_id) for (
-            #         direction, room_id) in graph[last_room_id].items() if room_id not in visited_rooms][0]
-    
-            path_copy = list(current_path)
-            path_copy.append(pair)
-            queue.enqueue(path_copy)
+                path_copy = list(current_path)
+                path_copy.append(pair)
+                queue.enqueue(path_copy)
 
     print(f"NO JOY CURRENT PATH: {current_path}")
     return None

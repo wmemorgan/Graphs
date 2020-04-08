@@ -14,8 +14,8 @@ world = World()
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
-map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+# map_file = "maps/test_loop_fork.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph = literal_eval(open(map_file, "r").read())
@@ -62,15 +62,15 @@ while len(explore_graph) < len(room_graph):
     possible_exits = [
         direction for (direction, room_id) in explore_graph[current_room.id].items() if room_id == '?']
 
-    if len(explore_graph[current_room.id].keys()) == 1 and len(possible_exits) > 0:
-        direction = player.current_room.get_exits()[0]
-        print(f"EXITS: {direction}")
-        traversal_path.append(direction)
-        prev_room = current_room
-        player.travel(direction)
-        stack.push(player.current_room)
+    # if len(explore_graph[current_room.id].keys()) == 1 and len(possible_exits) > 0:
+    #     direction = player.current_room.get_exits()[0]
+    #     print(f"EXITS: {direction}")
+    #     traversal_path.append(direction)
+    #     prev_room = current_room
+    #     player.travel(direction)
+    #     stack.push(player.current_room)
 
-    elif len(possible_exits) > 0:
+    if len(possible_exits) > 0:
         print(f"POSSIBLE EXITS: {possible_exits}")
         random_exit = random.choice(possible_exits)
         #print(f"random_exit: {random_exit}")
@@ -90,6 +90,9 @@ while len(explore_graph) < len(room_graph):
         #     find_exit = find_unexplored_room(player, explore_graph)
 
         if find_exit:
+            f = open("find_exit.txt", "a+")
+            f.write(str(find_exit))
+            f.close()
             for step in find_exit:
                 print(f"starting in room {player.current_room.id}")
                 print(f"GOING {step}")
@@ -138,6 +141,7 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
+"""
 player.current_room.print_room_description(player)
 while True:
     cmds = input("-> ").lower().split(" ")
@@ -147,3 +151,4 @@ while True:
         break
     else:
         print("I did not understand that command.")
+"""
